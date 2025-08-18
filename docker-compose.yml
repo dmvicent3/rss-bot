@@ -5,4 +5,4 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./data:/app/data
+      - ./data:/rss-bot_src/data
