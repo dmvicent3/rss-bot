@@ -180,6 +180,8 @@ export default class DiscordClient {
       Sports: 0x2ecc71,
       'Natural Disaster': 0x95a5a6,
       Weather: 0x95a5a6,
+      Environment: 0x95a5a6,
+      'Media Industry': 0x34495e,
     }
 
     const embed = new EmbedBuilder()
