@@ -1,0 +1,8 @@
+version: '1.0.0'
+services:
+  app:
+    restart: always
+    build: .
+    volumes:
+      - .:/rss-bot_src
+    command: bun run start
