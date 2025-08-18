@@ -1,0 +1,23 @@
+{
+  "name": "rss-bot",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "bun run ./src/index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/feedparser": "^2.2.8"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@google/genai": "^1.14.0",
+    "discord.js": "^14.21.0",
+    "feedparser": "^2.2.10",
+    "node-cron": "^4.2.1",
+    "node-fetch": "^3.3.2"
+  }
+}
