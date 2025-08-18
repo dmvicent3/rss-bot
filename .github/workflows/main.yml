@@ -41,3 +41,6 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
+          tags: |
+            ghcr.io/dmvicent3/rss-bot:latest
+            ghcr.io/dmvicent3/rss-bot:${{ github.sha }}
