@@ -1,13 +1,15 @@
-FROM python:3.12.2-slim-bullseye
-# Set environment variables
-ENV PIP_DISABLE_PIP_VERSION_CHECK 1
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-COPY . /rss-bot_src
-WORKDIR /rss-bot_src
-RUN bun install
+FROM oven/bun:1 AS base
 
-#TYPE CHECK
-RUN bun run check-ts
+WORKDIR /rss-bot_src
+
+COPY package.json bun.lockb* ./ 
+
+RUN bun install --frozen-lockfile
+
+COPY . .
+
+RUN bunx tsc --noEmit
 
 EXPOSE 8443
+
+CMD ["bun", "run", "start"]

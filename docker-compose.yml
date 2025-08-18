@@ -1,8 +1,19 @@
-version: '1.0.0'
+version: "3.8"
+
 services:
   app:
+    image: ghcr.io/dmvicent3/rss-bot:latest 
     restart: always
-    build: .
-    volumes:
-      - .:/rss-bot_src
-    command: bun run start
+    environment:
+      - NODE_ENV=production
+      - PORT=8443
+    ports:
+      - "8443:8443"
+    # do NOT mount the full repo in production
+    # volumes:
+    #   - ./:/app
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
