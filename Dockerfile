@@ -8,6 +8,8 @@ RUN bun install
 
 COPY . .
 
+RUN rm -rf ./data
+
 EXPOSE 3000
 
 CMD ["bun", "run", "start"]
