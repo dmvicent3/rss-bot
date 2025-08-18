@@ -1,46 +1,28 @@
-name: CI Build & Push
+name: Deploy to Raspberry Pi
 
 on:
   push:
-    branches: [ "main", "master" ]
-
-permissions:
-  contents: read
-  packages: write
-
-env:
-  IMAGE_NAME: ghcr.io/dmvicent3/rss-bot
+    branches:
+      - master
 
 jobs:
-  build-and-push:
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          bun-version: latest
-
-      - name: Install deps
-        run: bun install --frozen-lockfile
-
-      - name: Typecheck
-        run: bunx tsc --noEmit
-
-      - name: Login to GHCR
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: |
-            ghcr.io/dmvicent3/rss-bot:latest
-            ghcr.io/dmvicent3/rss-bot:${{ github.sha }}
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          script: |
+            cd ${{ secrets.PROJECT_PATH }}
+            git config --global --add safe.directory ${{ secrets.PROJECT_PATH }}
+            git pull origin master 
+            docker compose build --no-cache
+            docker compose up -d --remove-orphans
