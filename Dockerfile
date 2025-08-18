@@ -2,8 +2,9 @@ FROM oven/bun:1
 
 WORKDIR /rss-bot_src
 
-COPY package.json bun.lockb ./
-RUN bun install --frozen-lockfile
+COPY package.json ./
+
+RUN bun install
 
 COPY . .
 
