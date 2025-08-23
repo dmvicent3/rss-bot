@@ -188,11 +188,10 @@ ${keywordsSection}
 NEWS ARTICLE:
 Title: ${item.title}
 Description: ${item.description}
-Link: ${item.link}
 
 INSTRUCTIONS:
 1. If there are keywords, the article must NOT be semantically related to any of them.
-2. By default, reject these themes/keywords: sports, religion, celebrities, advertisements for a product or brand, clickbait, political news that do not concern/affect Europe.
+2. By default, reject these themes/keywords: sports, religion, celebrities, advertisements for a product or brand, clickbait, news that do not concern/affect Europe.
 3. Consider context, synonyms, and semantic meaning, not just exact keyword matches.
 4. Be reasonably strict but not overly restrictive.
 5. Respond ONLY in valid JSON format.
@@ -201,9 +200,18 @@ RESPONSE FORMAT (must be valid JSON):
 {
   "decision": true | false,
   "confidence": number, [0-100]
-  "reason": string, [Very brief explanation of your decision]
+  "reason": string, [Explanation of your decision, use as few words as possible]
   "category": string [Technology, Science, Politics, etc. (only pick 1)]
 }
+
+example:
+{
+    decision: false,
+    confidence: 92,
+    reason: "Matched keyword 'sports'",
+    category: "Sports"
+}
+
 `.trim()
   }
 
