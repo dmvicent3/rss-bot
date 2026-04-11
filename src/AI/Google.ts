@@ -5,7 +5,7 @@ export default class AiGoogle {
   private genAI: GoogleGenAI
   private model: string
 
-  constructor(apiKey: string, model: string = 'gemini-3-flash-preview') {
+  constructor(apiKey: string, model: string = 'gemma-4-31b-it') {
     this.model = model
     this.genAI = new GoogleGenAI({ apiKey })
   }
