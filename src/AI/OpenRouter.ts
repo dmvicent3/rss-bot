@@ -1,13 +1,17 @@
-import { GoogleGenAI } from '@google/genai'
+import { generateText } from 'ai'
 import Logger from '../utils/Logger'
+import { createOpenAI } from '@ai-sdk/openai'
 
-export default class AiGoogle {
-  private genAI: GoogleGenAI
+const openrouter = createOpenAI({
+  apiKey: process.env.OPENROUTER_API_KEY,
+  baseURL: 'https://openrouter.ai/api/v1',
+})
+
+export default class AiOpenRouter {
   private model: string
 
-  constructor(apiKey: string, model: string = 'gemma-4-31b-it') {
+  constructor(model: string = 'openrouter/free') {
     this.model = model
-    this.genAI = new GoogleGenAI({ apiKey })
   }
 
   async healthcheck() {
@@ -28,14 +32,14 @@ export default class AiGoogle {
     try {
       Logger.info(`Prompting ${this.model}...`)
 
-      const result = await this.genAI.models.generateContent({
-        model: this.model,
-        contents: prompt,
+      const { text } = await generateText({
+        model: openrouter(this.model),
+        prompt,
       })
 
       Logger.info('Prompt successful')
 
-      return result.text ?? null
+      return text ?? null
     } catch (error) {
       Logger.error('Prompt failed', error)
       return null

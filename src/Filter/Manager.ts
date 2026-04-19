@@ -1,9 +1,12 @@
-import AiGoogle from '../AI/Google'
+import type AiOpenRouter from '../AI/OpenRouter'
 import type { FeedItem, Filter, FilterResult, IStorage } from '../types'
 import Logger from '../utils/Logger'
 
 export default class FilterManager {
-  constructor(private storage: IStorage, private genAi: AiGoogle) {}
+  constructor(
+    private storage: IStorage,
+    private genAi: AiOpenRouter,
+  ) {}
 
   async addFilter(keyword: string): Promise<Filter> {
     try {
@@ -223,7 +226,7 @@ example:
           .replace(/^```json/i, '') // strip leading ```json
           .replace(/^```/, '') // strip leading ```
           .replace(/```$/, '') // strip trailing ```
-          .trim()
+          .trim(),
       )
 
       const decision =

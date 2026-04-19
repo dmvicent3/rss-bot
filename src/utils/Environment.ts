@@ -15,10 +15,10 @@ export default class Environment {
     return clientId
   }
 
-  static get GEMINI_API_KEY(): string {
-    const apiKey = process.env.GEMINI_API_KEY
+  static get OPENROUTER_API_KEY(): string {
+    const apiKey = process.env.OPENROUTER_API_KEY
     if (!apiKey) {
-      throw new Error('GEMINI_API_KEY environment variable is required')
+      throw new Error('OPENROUTER_API_KEY environment variable is required')
     }
     return apiKey
   }

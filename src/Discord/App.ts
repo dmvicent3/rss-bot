@@ -1,4 +1,4 @@
-import AiGoogle from '../AI/Google'
+import AiOpenRouter from '../AI/OpenRouter'
 import DBClient from '../DB/Client'
 import FeedManager from '../Feed/Manager'
 import FeedScheduler from '../Feed/Scheduler'
@@ -15,7 +15,7 @@ export default class DiscordApp {
   private feedManager: IFeedManager
   private feedScheduler: FeedScheduler
   private filterManager: IFilterManager
-  private genAI: AiGoogle
+  private genAI: AiOpenRouter
 
   private isInitialized = false
   private isShuttingDown = false
@@ -23,14 +23,14 @@ export default class DiscordApp {
   constructor() {
     this.storage = DBClient.getInstance()
     this.feedManager = new FeedManager(this.storage)
-    this.genAI = new AiGoogle(Environment.GEMINI_API_KEY)
+    this.genAI = new AiOpenRouter(Environment.OPENROUTER_API_KEY)
     this.discordClient = new DiscordClient(this.storage, this.feedManager)
     this.filterManager = new FilterManager(this.storage, this.genAI)
     this.feedScheduler = new FeedScheduler(
       this.storage,
       this.feedManager,
       this.filterManager,
-      this.discordClient
+      this.discordClient,
     )
     this.setupShutdownHandlers()
   }
@@ -83,7 +83,7 @@ export default class DiscordApp {
       Logger.info('Starting graceful shutdown...')
 
       if (this.feedScheduler) {
-         this.feedScheduler.stop()
+        this.feedScheduler.stop()
       }
 
       if (this.discordClient) {
@@ -137,8 +137,8 @@ export default class DiscordApp {
           case 'DISCORD_CLIENT_ID':
             Environment.DISCORD_CLIENT_ID
             break
-          case 'GEMINI_API_KEY':
-            Environment.GEMINI_API_KEY
+          case 'OPENROUTER_API_KEY':
+            Environment.OPENROUTER_API_KEY
             break
         }
         return false
@@ -149,7 +149,7 @@ export default class DiscordApp {
 
     if (missing.length > 0) {
       throw new Error(
-        `Missing required environment variables: ${missing.join(', ')}`
+        `Missing required environment variables: ${missing.join(', ')}`,
       )
     }
 
@@ -184,7 +184,7 @@ export default class DiscordApp {
     Logger.info('Application Status', {
       initialized: status.isInitialized,
       discordReady: status.clientReady,
-       schedulerStatus: this.feedScheduler.getStatus(),
+      schedulerStatus: this.feedScheduler.getStatus(),
     })
   }
 }
