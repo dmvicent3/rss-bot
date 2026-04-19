@@ -23,7 +23,7 @@ export default class DiscordApp {
   constructor() {
     this.storage = DBClient.getInstance()
     this.feedManager = new FeedManager(this.storage)
-    this.genAI = new AiOpenRouter(Environment.OPENROUTER_API_KEY)
+    this.genAI = new AiOpenRouter()
     this.discordClient = new DiscordClient(this.storage, this.feedManager)
     this.filterManager = new FilterManager(this.storage, this.genAI)
     this.feedScheduler = new FeedScheduler(
