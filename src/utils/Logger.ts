@@ -5,7 +5,20 @@ export default class Logger {
     meta?: any
   ): string {
     const timestamp = new Date().toISOString()
-    const metaStr = meta ? ` ${JSON.stringify(meta)}` : ''
+    let metaStr = ''
+    
+    if (meta) {
+      if (meta.error instanceof Error) {
+        metaStr = ` ${meta.error.message}\nStack: ${meta.error.stack}`
+      } else if (meta.reason instanceof Error) {
+        metaStr = ` ${meta.reason.message}\nStack: ${meta.reason.stack}`
+      } else if (typeof meta === 'object') {
+        metaStr = ` ${JSON.stringify(meta, null, 2)}`
+      } else {
+        metaStr = ` ${String(meta)}`
+      }
+    }
+    
     return `[${timestamp}] ${level.toUpperCase()}: ${message}${metaStr}`
   }
 
@@ -14,7 +27,7 @@ export default class Logger {
   }
 
   static error(message: string, meta?: any): void {
-   console.error(this.formatMessage('error', message, meta))
+    console.error(this.formatMessage('error', message, meta))
   }
 
   static warn(message: string, meta?: any): void {

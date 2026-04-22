@@ -129,7 +129,8 @@ export default class DiscordApp {
     const requiredVars = [
       'DISCORD_TOKEN',
       'DISCORD_CLIENT_ID',
-      'GEMINI_API_KEY',
+      'OPENROUTER_API_KEY',
+      'GOOGLE_GENERATIVE_AI_API_KEY',
     ]
 
     const missing = requiredVars.filter((varName) => {
@@ -143,6 +144,9 @@ export default class DiscordApp {
             break
           case 'OPENROUTER_API_KEY':
             Environment.OPENROUTER_API_KEY
+            break
+          case 'GOOGLE_GENERATIVE_AI_API_KEY':
+            Environment.GOOGLE_GENERATIVE_AI_API_KEY
             break
         }
         return false

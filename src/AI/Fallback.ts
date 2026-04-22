@@ -9,7 +9,7 @@ export default class AiFallback {
 
   constructor() {
     this.primary = new AiOpenRouter()
-    this.fallback = new AiGemini(Environment.GEMINI_API_KEY, 'gemma-4-31b-it')
+    this.fallback = new AiGemini(Environment.GOOGLE_GENERATIVE_AI_API_KEY, 'gemma-4-31b-it')
   }
 
   async healthcheck() {
