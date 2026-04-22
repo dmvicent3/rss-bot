@@ -22,17 +22,16 @@ export default class AiFallback {
       Logger.info('Primary model (OpenRouter) is available')
       return true
     } catch (error) {
-      Logger.warn('Primary model (OpenRouter) failed, trying fallback...')
+      Logger.info('Primary model (OpenRouter) unavailable, testing fallback...')
 
       try {
         await this.fallback.healthcheck()
         this.useFallback = true
-        Logger.info('Fallback model (Gemini) is available and active')
+        Logger.info('Fallback model (Gemini) is active')
         return true
       } catch (fallbackError) {
-        Logger.error('Both primary and fallback models failed!')
         Logger.warn(
-          'Proceeding with primary model - will attempt fallback if primary fails at runtime',
+          'Both models unavailable during healthcheck - will attempt at runtime',
         )
         this.useFallback = false
         return false

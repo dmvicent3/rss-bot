@@ -48,7 +48,11 @@ export default class DiscordApp {
 
       await DBClient.initialize()
 
-      await this.genAI.healthcheck()
+      try {
+        await this.genAI.healthcheck()
+      } catch (error) {
+        Logger.warn('AI healthcheck encountered an error', { error })
+      }
 
       Logger.info('Starting Discord bot...')
 
