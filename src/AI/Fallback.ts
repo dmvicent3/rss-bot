@@ -6,7 +6,6 @@ import Environment from '../utils/Environment'
 export default class AiFallback {
   private primary: AiOpenRouter
   private fallback: AiGemini
-  private useFallback: boolean = false
 
   constructor() {
     this.primary = new AiOpenRouter()
@@ -18,7 +17,6 @@ export default class AiFallback {
 
     try {
       await this.primary.healthcheck()
-      this.useFallback = false
       Logger.info('Primary model (OpenRouter) is available')
       return true
     } catch (error) {
@@ -26,55 +24,44 @@ export default class AiFallback {
 
       try {
         await this.fallback.healthcheck()
-        this.useFallback = true
-        Logger.info('Fallback model (Gemini) is active')
+        Logger.info('Fallback model (Gemini) is available')
         return true
       } catch (fallbackError) {
         Logger.warn(
           'Both models unavailable during healthcheck - will attempt at runtime',
         )
-        this.useFallback = false
         return false
       }
     }
   }
 
   async prompt(prompt: string) {
-    // Try primary first if not already in fallback mode
-    if (!this.useFallback) {
-      try {
-        Logger.info('Using primary (OpenRouter) model')
-        const result = await this.primary.prompt(prompt)
+    // Always try primary (OpenRouter) first
+    try {
+      Logger.info('Prompting primary model (OpenRouter)...')
+      const result = await this.primary.prompt(prompt)
 
-        if (result !== null) {
-          return result
-        }
-
-        // Primary returned null, switch to fallback
-        Logger.warn('Primary model returned null, switching to fallback')
-        this.useFallback = true
-      } catch (error) {
-        // Primary threw an error, switch to fallback
-        Logger.warn('Primary model error, switching to fallback')
-        this.useFallback = true
+      if (result !== null) {
+        return result
       }
+
+      Logger.warn('Primary model returned null, attempting fallback')
+    } catch (error) {
+      Logger.warn('Primary model failed, attempting fallback')
     }
 
-    // Use fallback model
+    // Fall back to Gemini if primary fails
     try {
-      Logger.info('Using fallback (Gemini) model')
-      return await this.fallback.prompt(prompt)
+      Logger.info('Prompting fallback model (Gemini)...')
+      const result = await this.fallback.prompt(prompt)
+      return result
     } catch (error) {
-      Logger.error('Fallback model error:', error)
+      Logger.error('Fallback model failed:', error)
       return null
     }
   }
 
-  isUsingFallback(): boolean {
-    return this.useFallback
-  }
-
   getCurrentModel(): string {
-    return this.useFallback ? 'Gemini' : 'OpenRouter'
+    return 'OpenRouter (primary) / Gemini (fallback)'
   }
 }
