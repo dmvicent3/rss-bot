@@ -1,4 +1,4 @@
-import AiOpenRouter from '../AI/OpenRouter'
+import AiFallback from '../AI/Fallback'
 import DBClient from '../DB/Client'
 import FeedManager from '../Feed/Manager'
 import FeedScheduler from '../Feed/Scheduler'
@@ -15,7 +15,7 @@ export default class DiscordApp {
   private feedManager: IFeedManager
   private feedScheduler: FeedScheduler
   private filterManager: IFilterManager
-  private genAI: AiOpenRouter
+  private genAI: AiFallback
 
   private isInitialized = false
   private isShuttingDown = false
@@ -23,7 +23,7 @@ export default class DiscordApp {
   constructor() {
     this.storage = DBClient.getInstance()
     this.feedManager = new FeedManager(this.storage)
-    this.genAI = new AiOpenRouter()
+    this.genAI = new AiFallback()
     this.discordClient = new DiscordClient(this.storage, this.feedManager)
     this.filterManager = new FilterManager(this.storage, this.genAI)
     this.feedScheduler = new FeedScheduler(

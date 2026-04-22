@@ -1,11 +1,11 @@
-import type AiOpenRouter from '../AI/OpenRouter'
+import type AiFallback from '../AI/Fallback'
 import type { FeedItem, Filter, FilterResult, IStorage } from '../types'
 import Logger from '../utils/Logger'
 
 export default class FilterManager {
   constructor(
     private storage: IStorage,
-    private genAi: AiOpenRouter,
+    private genAi: AiFallback,
   ) {}
 
   async addFilter(keyword: string): Promise<Filter> {

@@ -23,6 +23,14 @@ export default class Environment {
     return apiKey
   }
 
+  static get GEMINI_API_KEY(): string {
+    const apiKey = process.env.GEMINI_API_KEY
+    if (!apiKey) {
+      throw new Error('GEMINI_API_KEY environment variable is required')
+    }
+    return apiKey
+  }
+
   static get DATABASE_PATH(): string {
     return process.env.DATABASE_PATH || './data/bot.db'
   }
