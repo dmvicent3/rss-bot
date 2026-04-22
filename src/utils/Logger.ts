@@ -2,11 +2,11 @@ export default class Logger {
   private static formatMessage(
     level: string,
     message: string,
-    meta?: any
+    meta?: any,
   ): string {
     const timestamp = new Date().toISOString()
     let metaStr = ''
-    
+
     if (meta) {
       if (meta.error instanceof Error) {
         metaStr = ` ${meta.error.message}\nStack: ${meta.error.stack}`
@@ -18,7 +18,7 @@ export default class Logger {
         metaStr = ` ${String(meta)}`
       }
     }
-    
+
     return `[${timestamp}] ${level.toUpperCase()}: ${message}${metaStr}`
   }
 
