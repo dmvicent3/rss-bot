@@ -11,7 +11,7 @@ export default class AiFallback {
     this.primary = new AiOpenRouter()
     this.fallback = new AiGemini(
       Environment.GOOGLE_GENERATIVE_AI_API_KEY,
-      'gemma-4-31b-it',
+      'gemma-3-27b-it',
     )
   }
 

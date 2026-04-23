@@ -1,13 +1,14 @@
 import { generateText } from 'ai'
-import { google } from '@ai-sdk/google'
+import { createGoogleGenerativeAI } from '@ai-sdk/google'
 import Logger from '../utils/Logger'
 
 export default class AiGemini {
   private model: string
   private googleModel: any
 
-  constructor(apiKey: string, model: string = 'gemma-4-31b-it') {
+  constructor(apiKey: string, model: string = 'gemma-3-27b-it') {
     this.model = model
+    const google = createGoogleGenerativeAI({ apiKey })
     this.googleModel = google(model)
   }
 
